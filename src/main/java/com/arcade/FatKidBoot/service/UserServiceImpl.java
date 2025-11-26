@@ -1,6 +1,7 @@
 package com.arcade.FatKidBoot.service;
 
 import com.arcade.FatKidBoot.entity.User;
+import com.arcade.FatKidBoot.exception.UserNotFoundException;
 import com.arcade.FatKidBoot.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,18 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Optional<User> findById(Long id) {
-        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found")));
+        return Optional.ofNullable(userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("USER YOU ARE SEARCHING FOR NOT FOUND")));
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new UserNotFoundException("Empty");
+        }
+        return users;
     }
 
     @Transactional
@@ -71,15 +77,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        }
-        userRepository.deleteById(id);
+            throw new UserNotFoundException("User not found with id: " + id);
+        } userRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<User> findByUserName(String username) {
-        return userRepository.findByUsernameIgnoreCase(username);
+        return Optional.ofNullable(userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new UserNotFoundException("USER YOU ARE SEARCHING FOR NOT FOUND")));
     }
 
 }
