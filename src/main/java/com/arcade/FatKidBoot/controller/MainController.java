@@ -15,7 +15,7 @@ public class MainController {
         return "THE BACK-END IS WORKING FINE!";
     }
 
-    /* I NEED TO SEE THE CSRF TOKEN*/
+    /* I NEED TO SEE THE CSRF TOKEN */
     @GetMapping("/csrf")
     public CsrfToken getToken(HttpServletRequest request /*To extract token*/) {
         return (CsrfToken) /*THIS IS OBJECT -> CSRF TOKEN*/ request.getAttribute("_csrf");
