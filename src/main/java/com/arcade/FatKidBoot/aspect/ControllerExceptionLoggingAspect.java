@@ -1,9 +1,6 @@
 package com.arcade.FatKidBoot.aspect;
 
-import com.arcade.FatKidBoot.exception.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
