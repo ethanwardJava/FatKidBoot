@@ -68,10 +68,7 @@ public class UserController {
     // =========================  LOGIN ==========================
     @PostMapping("/login")
     public String login(@RequestBody User user) {
-        var client = service.findByUserName(user.getUsername()).orElseThrow(() -> new RuntimeException("Not Found"));
-        if (!Objects.isNull(client))
-            return "Success";
-        return "Failed";
+        return service.verify(user);
     }
 
 }

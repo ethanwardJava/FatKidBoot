@@ -5,6 +5,9 @@ import com.arcade.FatKidBoot.exception.UserNotFoundException;
 import com.arcade.FatKidBoot.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ import static com.arcade.FatKidBoot.config.WebSecurityConfig.bCryptPasswordEncod
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
     // =========================  /REGISTER ==========================
     @Transactional
@@ -98,6 +102,23 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByUserName(String username) {
         return Optional.ofNullable(userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UserNotFoundException("USER YOU ARE SEARCHING FOR NOT FOUND")));
+    }
+
+    @Override
+    public String verify(User user) {
+
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getUsername(),
+                        user.getPassword()
+                )
+        );
+
+//        var client = userRepository
+//                .findByUsernameIgnoreCase(user.getUsername())
+//                .orElseThrow(() -> new RuntimeException("Not Found"));
+        authenticate.isAuthenticated();
+        return "Success";
     }
 
 }
