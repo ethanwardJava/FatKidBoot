@@ -48,7 +48,7 @@ public class WebSecurityConfig {
 
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public static BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(14);
     }
 

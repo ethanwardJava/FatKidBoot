@@ -15,27 +15,20 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-private ErrorMessage buildError(HttpStatus status, String message, WebRequest request) {
-    return ErrorMessage.builder()
-            .timestamp(LocalDateTime.now())
-            .status(status.value())
-            .error(status.getReasonPhrase())
-            .message(message != null ? message : status.getReasonPhrase())
-            .path(request.getDescription(false).replace("uri=", ""))
-            .build();
-}
+    private ErrorMessage buildError(HttpStatus status, String message, WebRequest request) {
+        return ErrorMessage.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(message != null ? message : status.getReasonPhrase())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+    }
 
-// For EntityNotFound
-@ExceptionHandler(EntityNotFoundException.class)
-public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-}
-
-    // Handle JPA EntityNotFoundException (often thrown by getOne/reference)
+    // For EntityNotFound
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(buildError(HttpStatus.NOT_FOUND, ex.getMessage(), request));
+    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     // Custom UserNotFoundException
@@ -55,6 +48,7 @@ public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
     // Global fallback for unexpected exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleGlobalException(Exception ex, WebRequest request) {
+        log.error("Something went wrong ", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(buildError(HttpStatus.INTERNAL_SERVER_ERROR,
                         "An unexpected error occurred. Please try again later.",
