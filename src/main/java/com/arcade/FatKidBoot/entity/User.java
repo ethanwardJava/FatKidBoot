@@ -30,6 +30,22 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "home_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "home_city")),
+            @AttributeOverride(name = "zip", column = @Column(name = "home_zip"))
+    })
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride(name = "zip", column = @Column(name = "work_zip"))
+    })
+    private Address workAddress;
+
     private String role;
     private Boolean enabled = false;
 
