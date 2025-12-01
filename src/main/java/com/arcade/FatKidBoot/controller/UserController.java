@@ -3,13 +3,14 @@ package com.arcade.FatKidBoot.controller;
 import com.arcade.FatKidBoot.entity.User;
 import com.arcade.FatKidBoot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -69,6 +70,12 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestBody User user) {
         return service.verify(user);
+    }
+
+    // =================== SEARCH THE USER BY NAME ====================
+    @GetMapping("/search")
+    public Page<User> searchUser(@RequestParam String username , Pageable pageable){
+        return service.searchUserByName(username , pageable);
     }
 
 }

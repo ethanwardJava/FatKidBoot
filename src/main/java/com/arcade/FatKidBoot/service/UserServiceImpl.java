@@ -5,6 +5,8 @@ import com.arcade.FatKidBoot.exception.UserNotFoundException;
 import com.arcade.FatKidBoot.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -118,6 +120,13 @@ public class UserServiceImpl implements UserService {
 
         authenticate.isAuthenticated();
         return jwtService.generateToken(user);
+    }
+
+    @Override
+    public Page<User> searchUserByName(String username, Pageable pageable) {
+        if (username == null || username.isBlank()) {
+            return userRepository.findAll(pageable);
+        }return userRepository.findByUsernameContainingIgnoreCase(username , pageable);
     }
 
 }
