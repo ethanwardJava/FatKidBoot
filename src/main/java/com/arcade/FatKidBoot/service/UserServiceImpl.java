@@ -2,7 +2,6 @@ package com.arcade.FatKidBoot.service;
 
 import com.arcade.FatKidBoot.entity.User;
 import com.arcade.FatKidBoot.entity.VerificationToken;
-import com.arcade.FatKidBoot.event.RegistrationEvent;
 import com.arcade.FatKidBoot.exception.UserNotFoundException;
 import com.arcade.FatKidBoot.repository.UserRepository;
 import com.arcade.FatKidBoot.repository.VerificationTokenRepository;

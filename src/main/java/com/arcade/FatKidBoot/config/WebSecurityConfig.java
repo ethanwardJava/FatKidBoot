@@ -41,16 +41,22 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    // PASSWORD ENCODER
     @Bean
     public static BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(14);
     }
 
 
+    // DAO PROVIDER
+    /**
+     * authenticates users by loading user details from  customUserDetailsService
+     * and comparing the presented password against the stored (encoded) one using a PasswordEncoder.
+    */
     @Bean
     public AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService); //user details
+        provider.setPasswordEncoder(passwordEncoder); //password (encoded)
         provider.setHideUserNotFoundExceptions(true);
         return provider;
     }
